@@ -98,6 +98,8 @@ public class ImageController {
         //checking if user is equal to logged in user
         //Override hashcode and equals in User Class to check equality based on ID
         if(!image.getUser().equals(session.getAttribute("loggeduser"))) {
+            //Setting it to boolean since we have hardcoded the message in template
+            //creating new string will be waste of memory
         	model.addAttribute("editError", true);
         	return showImage(imageId, model);
         }
@@ -140,7 +142,7 @@ public class ImageController {
         updatedImage.setDate(new Date());
 
         imageService.updateImage(updatedImage);
-        return "redirect:/images/" + updatedImage.getTitle();
+        return "redirect:/images/" + updatedImage.getId();
     }
 
 
@@ -148,9 +150,20 @@ public class ImageController {
     //The method calls the deleteImage() method in the business logic passing the id of the image to be deleted
     //Looks for a controller method with request mapping of type '/images'
     @RequestMapping(value = "/deleteImage", method = RequestMethod.DELETE)
-    public String deleteImageSubmit(@RequestParam(name = "imageId") Integer imageId) {
-        imageService.deleteImage(imageId);
-        return "redirect:/images";
+    public String deleteImageSubmit(@RequestParam(name = "imageId") Integer imageId, HttpSession session, Model model) {
+    	Image image = imageService.getImage(imageId);
+        //checking if user is equal to logged in user
+        //Override hashcode and equals in User Class to check equality based on ID
+        if(image.getUser().equals(session.getAttribute("loggeduser"))) {
+            imageService.deleteImage(imageId);
+            return "redirect:/images";
+        }
+        
+        //Setting it to boolean since we have hardcoded the message in template
+        //creating new string will be waste of memory
+        model.addAttribute("deleteError", true);
+        return showImage(imageId, model);
+
     }
 
 
