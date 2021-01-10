@@ -32,4 +32,11 @@ public class UserService {
         }
     }
 
+	public boolean validatePassword(User user) {
+		if (user.getPassword() != null && !user.getPassword().trim().isEmpty() && user.getPassword().matches("^(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*()_+{},.\\/;']).{3,}$")) {
+			return true;
+		}
+		return false;
+	}
+
 }
