@@ -92,12 +92,20 @@ public class ImageController {
     //The method first needs to convert the list of all the tags to a string containing all the tags separated by a comma and then add this string in a Model type object
     //This string is then displayed by 'edit.html' file as previous tags of an image
     @RequestMapping(value = "/editImage")
-    public String editImage(@RequestParam("imageId") Integer imageId, Model model) {
-        Image image = imageService.getImage(imageId);
-
-        String tags = convertTagsToString(image.getTags());
+    public String editImage(@RequestParam("imageId") Integer imageId, Model model, HttpSession session) {
+        Image image = imageService.getImage(imageId); 
+        
+        //checking if user is equal to logged in user
+        //Override hashcode and equals in User Class to check equality based on ID
+        if(!image.getUser().equals(session.getAttribute("loggeduser"))) {
+        	model.addAttribute("editError", true);
+        	return showImage(imageId, model);
+        }
+        
         model.addAttribute("image", image);
+        String tags = convertTagsToString(image.getTags());
         model.addAttribute("tags", tags);
+
         return "images/edit";
     }
 
