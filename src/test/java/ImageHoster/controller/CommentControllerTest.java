@@ -4,6 +4,9 @@ package ImageHoster.controller;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
+
+import javax.swing.text.View;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -19,6 +22,7 @@ import ImageHoster.model.Image;
 import ImageHoster.model.User;
 import ImageHoster.model.UserProfile;
 import ImageHoster.service.ImageService;
+import ImageHoster.service.TagService;
 
 @RunWith(SpringRunner.class)
 @WebMvcTest(ImageController.class)
@@ -30,6 +34,9 @@ public class CommentControllerTest {
 
     @MockBean
     private ImageService imageService;
+    
+    @MockBean
+    private TagService tagService;
 
     //This test checks controller logic for comment and checks whether the controller logic redirects to the request handling method with request mapping of type "/images/{imageId}/{title}"
     @Test
@@ -59,7 +66,7 @@ public class CommentControllerTest {
         this.mockMvc.perform(post("/image/1/comments")
                 .param("comment", "This comment is for testing purpose")
                 .session(session))
-                .andExpect(redirectedUrl("/images/1"));
+                .andExpect(view().name("images/image"));
     }
 }
 

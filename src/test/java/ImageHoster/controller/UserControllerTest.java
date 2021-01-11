@@ -61,10 +61,13 @@ public class UserControllerTest {
         user.setPassword("password");
 
 
+        //Updating test case to check for boolean argument
+        //Since UI have hardcoded error there is no point to send error from server
+
         this.mockMvc.perform(post("/users/registration")
                 .flashAttr("user", user)
         )
-                .andExpect(model().attribute("passwordTypeError", equalTo("Password must contain atleast 1 alphabet, 1 number & 1 special character")));
+                .andExpect(model().attribute("passwordTypeError", equalTo(true)));
     }
 
     //This test checks the controller logic for user signup when user fills the form and send the POST request to the server with the correct password type and checks whether the logic returns the html file 'users/login.html'
@@ -72,19 +75,16 @@ public class UserControllerTest {
     public void signupWithCorrectPasswordType() throws Exception {
         User user = new User();
         UserProfile userProfile = new UserProfile();
-        userProfile.setId(1);
+        //userProfile.setId(1);
         userProfile.setEmailAddress("a@gmail.com");
         userProfile.setFullName("Abhi Mahajan");
         userProfile.setMobileNumber("9876543210");
         user.setProfile(userProfile);
-        user.setId(1);
+        //user.setId(1);
         user.setUsername("Abhi");
         user.setPassword("password1@");
 
-
-        this.mockMvc.perform(post("/users/registration")
-                .flashAttr("user", user)
-        )
+        this.mockMvc.perform(post("/users/registration").flashAttr("user", user))
                 .andExpect(view().name("users/login"))
                 .andExpect(content().string(containsString("Please Login:")));
     }

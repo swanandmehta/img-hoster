@@ -228,10 +228,12 @@ public class ImageControllerTest {
 
         Mockito.when(imageService.getImage(Mockito.anyInt())).thenReturn(image);
 
+        //Updating test case to check for boolean argument
+        //Since UI have hardcoded error there is no point to send error from server
         this.mockMvc.perform(get("/editImage")
                 .param("imageId", "1")
                 .session(session))
-                .andExpect(model().attribute("editError", "Only the owner of the image can edit the image"));
+                .andExpect(model().attribute("editError", true));
     }
 
     //This test checks the controller logic when the owner of the image sends the DELETE request to delete the image and checks whether the logic returns the html file 'images.html'
@@ -302,11 +304,12 @@ public class ImageControllerTest {
 
 
         Mockito.when(imageService.getImage(Mockito.anyInt())).thenReturn(image);
-
+        //Updating test case to check for boolean argument
+        //Since UI have hardcoded error there is no point to send error from server
         this.mockMvc.perform(delete("/deleteImage")
                 .param("imageId", "1")
                 .session(session))
-                .andExpect(model().attribute("deleteError", "Only the owner of the image can delete the image"));
+                .andExpect(model().attribute("deleteError", true));
     }
 }
 
