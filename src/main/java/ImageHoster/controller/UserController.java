@@ -41,7 +41,7 @@ public class UserController {
     //This method calls the business logic and after the user record is persisted in the database, directs to login page
     @RequestMapping(value = "users/registration", method = RequestMethod.POST)
     public String registerUser(User user, Model model) {
-        if(!userService.validatePassword(user)) {
+    	if (!user.getPassword().matches("^(?=.*[A-Za-z])(?=.*[0-9])(?=.*[!@#$%^&*()]).{3,}$")) {
             //Setting it to boolean since we have hardcoded the message in template
             //creating new string will be waste of memory
         	model.addAttribute("passwordTypeError", true);
@@ -50,7 +50,7 @@ public class UserController {
         }
         
         userService.registerUser(user);
-        return "redirect:/users/login";
+        return "users/login";
     }
 
     //This controller method is called when the request pattern is of type 'users/login'
