@@ -1,10 +1,13 @@
 package ImageHoster.service;
 
+import ImageHoster.model.Comment;
 import ImageHoster.model.Image;
+import ImageHoster.model.User;
 import ImageHoster.repository.ImageRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -45,5 +48,17 @@ public class ImageService {
     public void deleteImage(Integer imageId) {
         imageRepository.deleteImage(imageId);
     }
+
+	public void addComment(String text, Integer imageId, User user) {
+		Image img = getImage(imageId);
+		Comment comment = new Comment();
+		
+		comment.setImage(img);
+		comment.setUser(user);
+		comment.setCreatedDate(LocalDate.now());
+		comment.setText(text);
+
+		imageRepository.saveComment(comment);
+	}
 
 }
